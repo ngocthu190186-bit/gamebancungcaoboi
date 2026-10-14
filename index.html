@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Bắn Cung Cao Bồi Miền Tây</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <canvas id="gameCanvas"></canvas>
+
+    <!-- MÀN HÌNH CHỜ (START MENU) -->
+    <div id="startScreen">
+        <h1 class="title">🤠 WILD WEST ARCHERY</h1>
+        
+        <div class="panel">
+            <div class="mode-selector">
+                <button id="btnPvP" class="btn-mode active" onclick="setMode('1v1')">1v1 Đấu Đối Kháng</button>
+                <button id="btnPractice" class="btn-mode" onclick="setMode('PRACTICE')">Tập Bắn Bia</button>
+            </div>
+
+            <div class="input-group">
+                <label for="p1Name">Tên Người Chơi 1 (Vàng):</label>
+                <input type="text" id="p1Name" value="Cao Bồi Vàng" placeholder="Nhập tên P1...">
+            </div>
+
+            <div id="p2Panel" class="input-group">
+                <label for="p2Name">Tên Người Chơi 2 (Đỏ):</label>
+                <input type="text" id="p2Name" value="Cao Bồi Đỏ" placeholder="Nhập tên P2...">
+            </div>
+
+            <div id="practiceOptions" class="input-group hidden">
+                <label for="practiceDiff">Độ Khó Bắn Bia:</label>
+                <select id="practiceDiff">
+                    <option value="EASY">Dễ (Bia gần & to)</option>
+                    <option value="MEDIUM">Trung bình</option>
+                    <option value="HARD">Khó (Bia xa & nhỏ)</option>
+                </select>
+            </div>
+
+            <button class="btn-start" onclick="startGame()">▶️ BẮT ĐẦU TRẬN ĐẤU</button>
+            <button class="btn-mode" onclick="openSettingsModal()" style="margin-top: 5px;">⚙️ CÀI ĐẶT</button>
+        </div>
+    </div>
+
+    <!-- MODAL CÀI ĐẶT AM THANH -->
+    <div id="settingsModal" class="modal hidden">
+        <div class="modal-content">
+            <h2>⚙️ CÀI ĐẶT ÂM THANH</h2>
+            <p style="margin: 15px 0 10px; color: #aaa;">Chọn mức âm lượng game:</p>
+            <button class="btn-vol" onclick="setVolumeLevel(1.0)">🔊 Âm lượng 100%</button>
+            <button class="btn-vol" onclick="setVolumeLevel(0.5)">🔉 Âm lượng 50%</button>
+            <button class="btn-vol" onclick="setVolumeLevel(0)">🔇 Tắt Âm Thanh</button>
+            <button class="btn-start" onclick="closeSettingsModal()" style="margin-top: 15px; width: 100%;">ĐÓNG</button>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
