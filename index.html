@@ -3,56 +3,97 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game Bắn Cung Cao Bồi Miền Tây</title>
+    <title>Wild West Archery - Bắn Cung Cao Bồi</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <canvas id="gameCanvas"></canvas>
+    <div class="desert-background">
+        <div class="sun"></div>
+        <div class="tumbleweed" id="tumbleweed">🌾</div>
+    </div>
 
-    <!-- MÀN HÌNH CHỜ (START MENU) -->
-    <div id="startScreen">
-        <h1 class="title">🤠 WILD WEST ARCHERY</h1>
-        
-        <div class="panel">
+    <!-- Màn hình Menu -->
+    <div id="menu-screen" class="screen">
+        <div class="title-container">
+            <span class="cowboy-icon">🤠</span>
+            <h1>WILD WEST ARCHERY</h1>
+            <p class="subtitle">1v1 TURN-BASED DUEL & PRACTICE</p>
+        </div>
+
+        <div class="menu-card glass-panel">
             <div class="mode-selector">
-                <button id="btnPvP" class="btn-mode active" onclick="setMode('1v1')">1v1 Đấu Đối Kháng</button>
-                <button id="btnPractice" class="btn-mode" onclick="setMode('PRACTICE')">Tập Bắn Bia</button>
+                <button id="mode-pvp" class="mode-btn active" onclick="setGameMode('pvp')">1v1 Đấu Đối Kháng</button>
+                <button id="mode-practice" class="mode-btn" onclick="setGameMode('practice')">Tập Bắn Bia</button>
             </div>
 
-            <div class="input-group">
-                <label for="p1Name">Tên Người Chơi 1 (Vàng):</label>
-                <input type="text" id="p1Name" value="Cao Bồi Vàng" placeholder="Nhập tên P1...">
-            </div>
-
-            <div id="p2Panel" class="input-group">
-                <label for="p2Name">Tên Người Chơi 2 (Đỏ):</label>
-                <input type="text" id="p2Name" value="Cao Bồi Đỏ" placeholder="Nhập tên P2...">
-            </div>
-
-            <div id="practiceOptions" class="input-group hidden">
-                <label for="practiceDiff">Độ Khó Bắn Bia:</label>
-                <select id="practiceDiff">
-                    <option value="EASY">Dễ (Bia gần & to)</option>
-                    <option value="MEDIUM">Trung bình</option>
-                    <option value="HARD">Khó (Bia xa & nhỏ)</option>
+            <div id="difficulty-selector" class="input-group hidden">
+                <label>Độ Khó Tập Luyện:</label>
+                <select id="practice-diff">
+                    <option value="easy">Dễ (Bia chậm, to)</option>
+                    <option value="medium" selected>Trung Bình</option>
+                    <option value="hard">Khó (Bia nhanh, nhỏ)</option>
                 </select>
             </div>
 
-            <button class="btn-start" onclick="startGame()">▶️ BẮT ĐẦU TRẬN ĐẤU</button>
-            <button class="btn-mode" onclick="openSettingsModal()" style="margin-top: 5px;">⚙️ CÀI ĐẶT</button>
+            <div id="player-inputs" class="input-group">
+                <label>Tên Người Chơi 1 (Vàng):</label>
+                <input type="text" id="p1-name" value="Cao Bồi Vàng" maxlength="12">
+                
+                <label id="p2-name-label">Tên Người Chơi 2 (Đỏ):</label>
+                <input type="text" id="p2-name" value="Cao Bồi Đỏ" maxlength="12">
+            </div>
+
+            <button class="primary-btn" onclick="startGame()">
+                <span class="icon">🎯</span> BẮT ĐẦU TRẬN ĐẤU
+            </button>
+            
+            <button class="secondary-btn" onclick="toggleGuide(true)">
+                <span class="icon">📖</span> HƯỚNG DẪN CHƠI
+            </button>
         </div>
     </div>
 
-    <!-- MODAL CÀI ĐẶT AM THANH -->
-    <div id="settingsModal" class="modal hidden">
-        <div class="modal-content">
-            <h2>⚙️ CÀI ĐẶT ÂM THANH</h2>
-            <p style="margin: 15px 0 10px; color: #aaa;">Chọn mức âm lượng game:</p>
-            <button class="btn-vol" onclick="setVolumeLevel(1.0)">🔊 Âm lượng 100%</button>
-            <button class="btn-vol" onclick="setVolumeLevel(0.5)">🔉 Âm lượng 50%</button>
-            <button class="btn-vol" onclick="setVolumeLevel(0)">🔇 Tắt Âm Thanh</button>
-            <button class="btn-start" onclick="closeSettingsModal()" style="margin-top: 15px; width: 100%;">ĐÓNG</button>
+    <!-- Bảng Hướng Dẫn -->
+    <div id="guide-modal" class="modal hidden">
+        <div class="modal-content glass-panel">
+            <h2>📖 HƯỚNG DẪN CHƠI</h2>
+            <div class="guide-body">
+                <p><b>1. Cách Bắn:</b> Nhấn giữ chuột trái và kéo lùi (Slingshot). Kéo sang TRÁI để bắn sang PHẢI, kéo XUỐNG để bắn CAO LÊN. Thả chuột để bắn!</p>
+                <p><b>2. Người Chơi 1 (Vàng):</b> Phím <b>Z</b> (Mũi Tên Rực Lửa), Phím <b>X</b> (Dịch Chuyển Sương Mù).</p>
+                <p><b>3. Người Chơi 2 (Đỏ):</b> Phím <b>K</b> (Phân Thân), Phím <b>L</b> (X2 Mũi Tên Liên Tiếp).</p>
+                <p><b>4. Hồi Kỹ Năng:</b> Tất cả kỹ năng hồi sau <b>4 vòng đấu</b>.</p>
+            </div>
+            <button class="primary-btn" onclick="toggleGuide(false)">ĐÃ HẠO</button>
         </div>
+    </div>
+
+    <!-- Màn hình chơi game -->
+    <div id="game-screen" class="screen hidden">
+        <div id="top-controls">
+            <button class="icon-btn" onclick="togglePause()">⏸️</button>
+            <button class="icon-btn" onclick="toggleMute()" id="mute-btn">🔊</button>
+            <button class="icon-btn" onclick="startGame()">🔄</button>
+            <button class="icon-btn" onclick="goHome()">🏠</button>
+        </div>
+
+        <div id="hud-overlay">
+            <div id="p1-hud" class="player-hud">
+                <span class="name" id="p1-hud-name">Cao Bồi Vàng</span>
+                <div class="health-bar"><div class="fill" id="p1-hp"></div></div>
+                <div class="skill-info">Skill Z (🔥 Fire: <span id="p1-cd-fire">0</span>v) | Skill X (🌀 Tele: <span id="p1-cd-tele">0</span>v)</div>
+            </div>
+            
+            <div id="turn-indicator">LƯỢT: CAO BỒI VÀNG</div>
+
+            <div id="p2-hud" class="player-hud">
+                <span class="name" id="p2-hud-name">Cao Bồi Đỏ</span>
+                <div class="health-bar"><div class="fill" id="p2-hp"></div></div>
+                <div class="skill-info">Skill K (👥 Clone: <span id="p2-cd-clone">0</span>v) | Skill L (🏹 Double: <span id="p2-cd-double">0</span>v)</div>
+            </div>
+        </div>
+        <canvas id="gameCanvas"></canvas>
+        <div id="skill-toast" class="toast hidden">KÍCH HOẠT KỸ NĂNG!</div>
+        <div id="countdown-overlay" class="hidden">3</div>
     </div>
 
     <script src="game.js"></script>
